@@ -88,6 +88,23 @@ export ANTHROPIC_API_KEY=...        # or OPENAI_API_KEY
 npm run brief -- "Prep my 3pm call with Northwind" --dir ../examples > prompt.txt
 ```
 
+On the example (13 sections, `gpt-4.1-mini`), it keeps 8 for the Northwind call and 6 for a question about the accountant:
+
+```
+Request: Prep my 3pm call with Northwind
+
+  always  founder.md#my-role
+  always  founder.md#my-approval-rules
+  always  founder.md#my-notification-rules
+  0.90    notes/october.md#northwind-coffee-intro-call-oct-2  Detailed notes from the first call with Northwind…
+  0.80    founder.md#my-tools  …
+   --      notes/october.md#offsite-planning-oct-12  Team offsite in November, unrelated to the call.
+
+8 of 13 sections kept.
+```
+
+The first run takes about 10 seconds; after that only new or edited sections are described again, and a new request takes about 2 seconds.
+
 Every `## ` section of every Markdown file in `--dir` becomes a [Contextrie](https://github.com/feuersteiner/contextrie) source. `IndexingAgent` describes each section once (cached, so only edited sections are described again), `JudgeAgent` scores them for the request, and the prompt is rebuilt from `prompt.md` plus the sections that matter, with the reason for each choice printed to stderr. **Your role, approval rules and notification rules are always kept**: decision rights never get cut to save tokens.
 
 Using a coding agent (Claude Code, Cursor, Codex) as your Chief of Staff? Put your blocks and notes in a folder, use `prompt.md` as its `CLAUDE.md` or `AGENTS.md`, and add [contextrie-mcp](https://github.com/mlgxiii/contextrie-mcp) so the agent picks the right files itself:
