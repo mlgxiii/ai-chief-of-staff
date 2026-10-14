@@ -14,6 +14,7 @@ The practical framework I used to build **Hector** for my personal life and **At
 - [`examples/`](examples/): a filled-in example plus a month of notes (fictional)
 - [`builder/`](builder/): fill in the blocks in your browser and copy the prompt: **[open the builder](https://mlgxiii.github.io/ai-chief-of-staff/)** (built with [Bref UI](https://github.com/feuersteiner/bref-ui))
 - [`context/`](context/): when your context outgrows one prompt, keep only what a request needs (built with [Contextrie](https://github.com/feuersteiner/contextrie))
+- [`staffwork/`](staffwork/): **the framework as a TypeScript package.** Decision rights, triage, briefs and corrections as small parts for your own agent, with any model. `npx staffwork init` to start
 
 ## The 8 steps
 
@@ -78,6 +79,19 @@ The Chief of Staff filters the system so attention, not information, becomes the
 
 **Goal:** not an assistant that waits for commands, but an operating layer that understands context, delegates work, runs checks, filters notifications and knows when to ask.
 
+## Build it in code: staffwork
+
+The prompt asks the model to follow your rules. [staffwork](staffwork/) checks that it does. Every decision quotes the rule it relied on, the quote is checked word for word against your charter, and anything unverified falls back to the safe side: ask you, or put it in the brief.
+
+```ts
+import { Charter, DecisionRights, Triage, brief } from 'staffwork';
+
+await new DecisionRights(model, charter).decide('Pay the $340 venue deposit');
+// → approve, because "Always ask me first: any spend over $100"
+```
+
+Small parts, any model, no connectors or storage, and `npx staffwork add <part>` copies the source into your project. [Read the docs](staffwork/README.md).
+
 ## When the context outgrows the prompt
 
 The eight blocks fit in one prompt. Months of meeting notes, people and corrections don't. Pasting everything costs tokens and buries what matters, so `context/` keeps only what a request needs:
@@ -120,4 +134,4 @@ claude mcp add contextrie -- npx -y github:mlgxiii/contextrie-mcp
 ## License
 
 - The framework text (this README and `examples/`) is licensed under [CC BY 4.0](LICENSE-CC-BY-4.0): reuse and adapt it, with credit to Marie Gerard.
-- The prompt, the templates and the code (`prompt.md`, `template/`, `builder/`, `context/`) are licensed under [MIT](LICENSE): copy them into your own setup, no credit needed.
+- The prompt, the templates and the code (`prompt.md`, `template/`, `builder/`, `context/`, `staffwork/`) are licensed under [MIT](LICENSE): copy them into your own setup, no credit needed.

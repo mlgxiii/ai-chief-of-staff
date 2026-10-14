@@ -1,4 +1,5 @@
 node_modules
 dist
+!staffwork/dist
 .contextrie
 .DS_Store

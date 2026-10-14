@@ -1,0 +1,65 @@
+{
+  "name": "staffwork",
+  "version": "0.1.0",
+  "description": "The building blocks of an AI Chief of Staff: a charter, decision rights, triage, briefs and learning from corrections. Any model, no IO, copy the source if you want it.",
+  "license": "MIT",
+  "author": "Marie Gerard",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mlgxiii/ai-chief-of-staff.git"
+  },
+  "homepage": "https://github.com/mlgxiii/ai-chief-of-staff/tree/main/staffwork#readme",
+  "keywords": [
+    "ai",
+    "agents",
+    "chief-of-staff",
+    "assistant",
+    "ai-sdk",
+    "contextrie",
+    "llm"
+  ],
+  "bin": {
+    "staffwork": "staffwork/dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./staffwork/dist/index.d.ts",
+      "default": "./staffwork/dist/index.js"
+    },
+    "./context": {
+      "types": "./staffwork/dist/context.d.ts",
+      "default": "./staffwork/dist/context.js"
+    }
+  },
+  "files": [
+    "staffwork/dist",
+    "staffwork/src",
+    "staffwork/README.md",
+    "template",
+    "prompt.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "rm -rf staffwork/dist && esbuild staffwork/src/index.ts staffwork/src/context.ts staffwork/src/cli.ts --bundle --splitting --platform=node --format=esm --target=node20 --packages=external --alias:@contextrie/core=./node_modules/@contextrie/core/index.ts --outdir=staffwork/dist && tsc -p staffwork && chmod +x staffwork/dist/cli.js",
+    "check": "tsc -p staffwork --noEmit",
+    "test": "node --import tsx --test staffwork/test/*.test.ts"
+  },
+  "peerDependencies": {
+    "ai": "^6.0.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@ai-sdk/openai": "^3.0.127",
+    "@contextrie/core": "^0.2.2",
+    "@types/node": "^24.13.3",
+    "ai": "^6.0.306",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "zod": "^4.6.7"
+  }
+}
