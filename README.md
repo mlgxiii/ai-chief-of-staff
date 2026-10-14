@@ -11,7 +11,9 @@ The practical framework I used to build **Hector** for my personal life and **At
 
 - [`prompt.md`](prompt.md): the system prompt to copy into your model
 - [`template/`](template/): the eight blocks to fill in, one file each
-- [`examples/`](examples/): a filled-in example (fictional)
+- [`examples/`](examples/): a filled-in example plus a month of notes (fictional)
+- [`builder/`](builder/): fill in the blocks in your browser and copy the prompt: **[open the builder](https://mlgxiii.github.io/ai-chief-of-staff/)** (built with [Bref UI](https://github.com/feuersteiner/bref-ui))
+- [`context/`](context/): when your context outgrows one prompt, keep only what a request needs (built with [Contextrie](https://github.com/feuersteiner/contextrie))
 
 ## The 8 steps
 
@@ -76,7 +78,29 @@ The Chief of Staff filters the system so attention, not information, becomes the
 
 **Goal:** not an assistant that waits for commands, but an operating layer that understands context, delegates work, runs checks, filters notifications and knows when to ask.
 
+## When the context outgrows the prompt
+
+The eight blocks fit in one prompt. Months of meeting notes, people and corrections don't. Pasting everything costs tokens and buries what matters, so `context/` keeps only what a request needs:
+
+```sh
+cd context && npm install
+export ANTHROPIC_API_KEY=...        # or OPENAI_API_KEY
+npm run brief -- "Prep my 3pm call with Northwind" --dir ../examples > prompt.txt
+```
+
+Every `## ` section of every Markdown file in `--dir` becomes a [Contextrie](https://github.com/feuersteiner/contextrie) source. `IndexingAgent` describes each section once (cached, so only edited sections are described again), `JudgeAgent` scores them for the request, and the prompt is rebuilt from `prompt.md` plus the sections that matter, with the reason for each choice printed to stderr. **Your role, approval rules and notification rules are always kept**: decision rights never get cut to save tokens.
+
+Using a coding agent (Claude Code, Cursor, Codex) as your Chief of Staff? Put your blocks and notes in a folder, use `prompt.md` as its `CLAUDE.md` or `AGENTS.md`, and add [contextrie-mcp](https://github.com/mlgxiii/contextrie-mcp) so the agent picks the right files itself:
+
+```sh
+claude mcp add contextrie -- npx -y github:mlgxiii/contextrie-mcp
+```
+
+## The builder
+
+[Open it](https://mlgxiii.github.io/ai-chief-of-staff/), or run it locally with `cd builder && npm install && npm run dev`. It reads `prompt.md`, `template/` and `examples/` from this repo, so editing those files changes the builder too. Nothing leaves your browser; the draft is kept in local storage.
+
 ## License
 
 - The framework text (this README and `examples/`) is licensed under [CC BY 4.0](LICENSE-CC-BY-4.0): reuse and adapt it, with credit to Marie Gerard.
-- The prompt and the templates (`prompt.md`, `template/`) are licensed under [MIT](LICENSE): copy them into your own setup, no credit needed.
+- The prompt, the templates and the code (`prompt.md`, `template/`, `builder/`, `context/`) are licensed under [MIT](LICENSE): copy them into your own setup, no credit needed.

@@ -1,0 +1,19 @@
+{
+  "name": "ai-chief-of-staff-context",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "brief": "tsx brief.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.127",
+    "@ai-sdk/openai": "^3.0.124",
+    "@contextrie/core": "^0.2.2",
+    "ai": "^6.0.301"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "tsx": "^4.23.15"
+  }
+}
